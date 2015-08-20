@@ -1,0 +1,27 @@
+#wrapper{
+    padding: 5px 0;
+    width: 50%;
+    margin: 0 auto;
+}
+
+#FormWrapper{
+    padding: 10px 5px;
+    background: rgba(61, 220, 56, 0.52);
+}
+
+form{
+    background: #ffffff;
+}
+
+h3 {
+    text-transform: uppercase;
+}
+
+table{
+    width: 100%;
+}
+
+.result{
+    padding: 5px ;
+    background: #fff;
+}
