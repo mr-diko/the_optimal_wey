@@ -56,61 +56,58 @@ class Dijkstra {
     public function __construct($nods, $source, $target) {
             $this->graph = $nods;
 
-            // array of best estimates of shortest path to each vertex
+            // масив кращих оцінок найкоротший шлях до кожної вершини
             $d = array();
-            // array of predecessors for each vertex
+            // Масив попередників для кожної вершини
             $pi = array();
-            // queue of all unoptimized vertices
+            // Черга з усіх вершин неоптимізованими
             $Q = new SplPriorityQueue();
 
             foreach ($this->graph as $v => $adj) {
-                $d[$v] = INF; // set initial distance to "infinity"
-                $pi[$v] = null; // no known predecessors yet
+                $d[$v] = INF; // задати початкове відстань до «нескінченності»
+                $pi[$v] = null; // немає відомих попередників ще
                 foreach ($adj as $w => $cost) {
-                    // use the edge cost as the priority
+                    // використовувати вартість край як пріоритет
                     $Q->insert($w, $cost);
                 }
             }
 
-            // initial distance at source is 0
+            // початкова відстань в джерелі 0
             $d[$source] = 0;
 
             while (!$Q->isEmpty()) {
-                // extract min cost
+                // витягти хв вартість
                 $u = $Q->extract();
                 if (!empty($this->graph[$u])) {
-                    // "relax" each adjacent vertex
+                    // "розслабитися" кожен суміжний вершину
                     foreach ($this->graph[$u] as $v => $cost) {
-                        // alternate route length to adjacent neighbor
+                        // Альтернативний маршрут довжиною прилеглої сусіда
                         $alt = $d[$u] + $cost;
-                        // if alternate route is shorter
+                        // якщо альтернативний маршрут коротше
                         if ($alt < $d[$v]) {
-                            $d[$v] = $alt; // update minimum length to vertex
-                            $pi[$v] = $u;  // add neighbor to predecessors
-                            //  for vertex
+                            $d[$v] = $alt; // оновити мінімальну довжину до вершини
+                            $pi[$v] = $u;  // додати сусіда попередників для вершини
                         }
                     }
                 }
             }
 
-            // we can now find the shortest path using reverse
-            // iteration
-            $S = new SplStack(); // shortest path with a stack
+            // Тепер ми можемо знайти найкоротший шлях з використанням зворотного ітерації
+            $S = new SplStack(); // найкоротший шлях зі стеком
             $u = $target;
             $dist = 0;
-            // traverse from target to source
+            // пройти від мети до джерела
             while (isset($pi[$u]) && $pi[$u]) {
                 $S->push($u);
-                $dist += $this->graph[$u][$pi[$u]]; // add distance to predecessor
+                $dist += $this->graph[$u][$pi[$u]]; // додати відстань попередникові
                 $u = $pi[$u];
             }
 
-            // stack will be empty if there is no route back
+            // стек буде порожнім, якщо немає маршрут назад
             if ($S->isEmpty()) {
                 $this->distance = false;
             } else {
-                // add the source node and print the path in reverse
-                // (LIFO) order
+                // додати вихідний вузол і друкувати шлях у зворотному (ЛІФО) для того
                 $S->push($source);
                 $sep = '';
                 $output = '';
